@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Application.h"
 #include "Common.h"
+#include "MeshRenderer.h"
+#include "Quad.h"
 
 Application *Application::m_application = nullptr;
 
@@ -30,6 +32,9 @@ void Application::Init()
 		SDL_WINDOW_OPENGL);
 
 	SDL_CaptureMouse(SDL_TRUE);
+
+	OpenGlInit();
+	GameInit();
 }
 
 void Application::OpenGlInit()
@@ -48,7 +53,36 @@ void Application::OpenGlInit()
 		exit(-1);
 	}
 
+	//Smooth shading
+	GL_ATTEMPT(glShadeModel(GL_SMOOTH));
+
+	//enable depth testing
+	GL_ATTEMPT(glEnable(GL_DEPTH_TEST));
+	//set less or equal func for depth testing
+	GL_ATTEMPT(glDepthFunc(GL_LEQUAL));
+
+	//enabling blending
+	glEnable(GL_BLEND);
+	GL_ATTEMPT(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+	//turn on back face culling
+	GL_ATTEMPT(glEnable(GL_CULL_FACE));
+	GL_ATTEMPT(glCullFace(GL_BACK));
+
+
 	glViewport(0, 0, (GLsizei)m_windowWidth, (GLsizei)m_windowHeight);
+}
+
+void Application::GameInit()
+{
+	//Students should aim to have a better way of managing the scene for coursework
+	m_entities.push_back(new Entity());
+	m_entities.at(0)->AddComponent(
+		new MeshRenderer(
+			new Mesh(Quad::quadVertices, Quad::quadIndices), 
+			new ShaderProgram(ASSET_PATH + "simple_VERT.glsl", ASSET_PATH + "simple_FRAG.glsl"))
+		);
+	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, 10));
 }
 
 void Application::Loop()
@@ -72,7 +106,6 @@ void Application::Loop()
 				m_appState = AppState::QUITTING;
 				break;
 			case SDL_KEYDOWN:
-				//TODO: quit app when user presses escape
 				break;
 			}
 		}
@@ -82,7 +115,9 @@ void Application::Loop()
 		m_worldDeltaTime = deltaTime;
 		prevTicks = currentTicks;
 
-		//TODO: print delta time using log
+		//update and render all entities
+		Update(deltaTime);
+		Render();
 
 		SDL_GL_SwapWindow(m_window);
 	}
@@ -95,6 +130,26 @@ void Application::Quit()
 	SDL_DestroyWindow(m_window);
 	SDL_QuitSubSystem(SDL_INIT_EVERYTHING);
 	SDL_Quit();
+}
+
+void Application::Update(float deltaTime)
+{
+	for (auto& a : m_entities)
+	{
+		a->OnUpdate(deltaTime);
+	}
+}
+
+void Application::Render()
+{
+	/* Clear context */
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	for (auto& a : m_entities)
+	{
+		a->OnRender();
+	}
 }
 
 

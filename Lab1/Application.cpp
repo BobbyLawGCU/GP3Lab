@@ -3,6 +3,8 @@
 #include "Common.h"
 #include "MeshRenderer.h"
 #include "Quad.h"
+#include "CameraComp.h"
+#include "Input.h"
 
 Application *Application::m_application = nullptr;
 
@@ -69,8 +71,7 @@ void Application::OpenGlInit()
 	GL_ATTEMPT(glEnable(GL_CULL_FACE));
 	GL_ATTEMPT(glCullFace(GL_BACK));
 
-
-	glViewport(0, 0, (GLsizei)m_windowWidth, (GLsizei)m_windowHeight);
+	glDisable(GL_CULL_FACE);
 }
 
 void Application::GameInit()
@@ -80,9 +81,16 @@ void Application::GameInit()
 	m_entities.at(0)->AddComponent(
 		new MeshRenderer(
 			new Mesh(Quad::quadVertices, Quad::quadIndices), 
-			new ShaderProgram(ASSET_PATH + "simple_VERT.glsl", ASSET_PATH + "simple_FRAG.glsl"))
+			new ShaderProgram(ASSET_PATH + "simple_VERT.glsl", ASSET_PATH + "simple_FRAG.glsl"),
+			new Texture(ASSET_PATH + "Wood.jpg"))
 		);
 	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, 10));
+	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, -10));
+
+	m_entities.push_back(new Entity());
+	CameraComp* cc = new CameraComp();
+	m_entities.at(1)->AddComponent(cc);
+	cc->Start();
 }
 
 void Application::Loop()
@@ -106,6 +114,11 @@ void Application::Loop()
 				m_appState = AppState::QUITTING;
 				break;
 			case SDL_KEYDOWN:
+				INPUT->SetKey(event.key.keysym.sym, true);
+				break;
+			//record when the user releases a key
+			case SDL_MOUSEMOTION:
+				INPUT->MoveMouse(glm::ivec2(event.motion.xrel, event.motion.yrel));
 				break;
 			}
 		}
@@ -146,6 +159,7 @@ void Application::Render()
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	m_mainCamera->Recalculate();
 	for (auto& a : m_entities)
 	{
 		a->OnRender();
@@ -155,6 +169,7 @@ void Application::Render()
 
 Application::~Application()
 {
+
 }
 
 Application * Application::GetInstance()
@@ -171,4 +186,12 @@ void Application::Run()
 	Init();
 	Loop();
 	Quit();
+}
+
+void Application::SetCamera(Camera* camera)
+{
+	if (camera != nullptr)
+	{
+		m_mainCamera = camera;
+	}
 }

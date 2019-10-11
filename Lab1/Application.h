@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
 
+class Camera;
+
 #define WINDOW_W Application::GetInstance()->GetWindowWidth()
 #define WINDOW_H Application::GetInstance()->GetWindowHeight()
 
@@ -21,6 +23,7 @@ private:
 	AppState m_appState = AppState::INITILISING;
 	float m_worldDeltaTime = 0.f;
 	std::vector<Entity*> m_entities;
+	Camera* m_mainCamera = nullptr;
 
 	//private functions
 	Application();
@@ -41,5 +44,7 @@ public:
 	inline int GetWindowHeight() { return m_windowHeight; }
 	inline int GetWindowWidth() { return m_windowWidth; }
 
+	inline Camera* GetCamera() { return m_mainCamera; }
+	void SetCamera(Camera* camera);
 };
 

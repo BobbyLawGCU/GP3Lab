@@ -7,6 +7,7 @@
 #include <vector>
 #include <stdio.h>
 #include <fstream>
+#include <array>
 
 #include <GLEW/GL/glew.h>
 

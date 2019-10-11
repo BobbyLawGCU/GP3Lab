@@ -6,7 +6,10 @@ layout (location = 3) in vec3 aNormal;
 
 uniform mat4 MVP;
 
+out vec2 vertTexCoord;
+
 void main()
 {
     gl_Position = MVP * vec4(aPos, 1.0);
+    vertTexCoord = aTexCoord;
 }

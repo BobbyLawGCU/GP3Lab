@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <fstream>
 #include <array>
+#include <unordered_map>
+#include <memory>
 
 #include <GLEW/GL/glew.h>
 

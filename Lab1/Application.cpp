@@ -5,6 +5,7 @@
 #include "Quad.h"
 #include "CameraComp.h"
 #include "Input.h"
+#include "Resources.h"
 
 Application *Application::m_application = nullptr;
 
@@ -76,16 +77,24 @@ void Application::OpenGlInit()
 
 void Application::GameInit()
 {
+	//loading all resources
+	Resources::GetInstance()->AddModel("cube.obj");
+	Resources::GetInstance()->AddTexture("Wood.jpg");
+	Resources::GetInstance()->AddShader(new ShaderProgram(ASSET_PATH + "simple_VERT.glsl", 
+		ASSET_PATH + "simple_FRAG.glsl"), 
+		"simple"
+	);
+
 	//Students should aim to have a better way of managing the scene for coursework
 	m_entities.push_back(new Entity());
 	m_entities.at(0)->AddComponent(
 		new MeshRenderer(
-			new Mesh(Quad::quadVertices, Quad::quadIndices), 
-			new ShaderProgram(ASSET_PATH + "simple_VERT.glsl", ASSET_PATH + "simple_FRAG.glsl"),
-			new Texture(ASSET_PATH + "Wood.jpg"))
+			Resources::GetInstance()->GetModel("cube.obj"),
+			Resources::GetInstance()->GetShader("simple"),
+			Resources::GetInstance()->GetTexture("Wood.jpg"))
 		);
-	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, 10));
-	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, -10));
+
+	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, -500));
 
 	m_entities.push_back(new Entity());
 	CameraComp* cc = new CameraComp();

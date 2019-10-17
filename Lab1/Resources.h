@@ -8,7 +8,7 @@
 class Resources
 {
 private:
-	//use smart pointers
+	//TODO: use smart pointers
 	std::unordered_map<std::string, ShaderProgram*> m_shaderPrograms;
 	std::unordered_map<std::string, Model*> m_models;
 	std::unordered_map<std::string, Texture*> m_textures;

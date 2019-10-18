@@ -79,8 +79,9 @@ void Application::GameInit()
 {
 	//loading all resources
 	Resources::GetInstance()->AddModel("cube.obj");
+	Resources::GetInstance()->AddModel("cube2.obj");
 	Resources::GetInstance()->AddTexture("Wood.jpg");
-	Resources::GetInstance()->AddShader(new ShaderProgram(ASSET_PATH + "simple_VERT.glsl", 
+	Resources::GetInstance()->AddShader(std::make_shared<ShaderProgram>(ASSET_PATH + "simple_VERT.glsl", 
 		ASSET_PATH + "simple_FRAG.glsl"), 
 		"simple"
 	);
@@ -93,6 +94,7 @@ void Application::GameInit()
 			Resources::GetInstance()->GetShader("simple"),
 			Resources::GetInstance()->GetTexture("Wood.jpg"))
 		);
+	Resources::GetInstance()->ReleaseUnusedResources();
 
 	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, -500));
 

@@ -6,6 +6,9 @@
 #include "CameraComp.h"
 #include "Input.h"
 #include "Resources.h"
+#include "Physics.h"
+#include "BoxShape.h"
+#include "RigidBody.h"
 
 Application *Application::m_application = nullptr;
 
@@ -86,22 +89,45 @@ void Application::GameInit()
 		"simple"
 	);
 
-	//Students should aim to have a better way of managing the scene for coursework
-	m_entities.push_back(new Entity());
-	m_entities.at(0)->AddComponent(
+	Entity* a = new Entity();
+	m_entities.push_back(a);
+	a->AddComponent(
 		new MeshRenderer(
 			Resources::GetInstance()->GetModel("cube.obj"),
 			Resources::GetInstance()->GetShader("simple"),
 			Resources::GetInstance()->GetTexture("Wood.jpg"))
+	);
+	MeshRenderer* m = a->GetComponent<MeshRenderer>();
+	a->GetTransform()->SetPosition(glm::vec3(0, -10.f, -20.f));
+	a->AddComponent<RigidBody>();
+	a->GetComponent<RigidBody>()->Init(new BoxShape(glm::vec3(100.f, 1.f, 100.f)));
+	a->GetComponent<RigidBody>()->Get()->setMassProps(0, btVector3());
+	a->GetTransform()->SetScale(glm::vec3(100.f, 1.f, 100.f));
+
+	for (int i = 0; i < 100; i++)
+	{
+		Entity* a = new Entity();
+		m_entities.push_back(a);
+		a->AddComponent(
+			new MeshRenderer(
+				Resources::GetInstance()->GetModel("cube.obj"),
+				Resources::GetInstance()->GetShader("simple"),
+				Resources::GetInstance()->GetTexture("Wood.jpg"))
 		);
+		a->GetTransform()->SetPosition(glm::vec3(0, 5.f * i, -20.f));
+		a->AddComponent<RigidBody>();
+		a->GetComponent<RigidBody>()->Init(new BoxShape(glm::vec3(1.f, 1.f, 1.f)));
+		a->GetTransform()->SetScale(glm::vec3(1.f, 1.f, 1.f));
+	}
+
+	a = new Entity();
+	m_entities.push_back(a);
+	CameraComp* cc = new CameraComp();
+	a->AddComponent(cc);
+	cc->Start();
+
 	Resources::GetInstance()->ReleaseUnusedResources();
 
-	m_entities.at(0)->GetTransform()->SetPosition(glm::vec3(0, 0, -500));
-
-	m_entities.push_back(new Entity());
-	CameraComp* cc = new CameraComp();
-	m_entities.at(1)->AddComponent(cc);
-	cc->Start();
 }
 
 void Application::Loop()
@@ -139,6 +165,7 @@ void Application::Loop()
 		m_worldDeltaTime = deltaTime;
 		prevTicks = currentTicks;
 
+		Physics::GetInstance()->Update(deltaTime);
 		//update and render all entities
 		Update(deltaTime);
 		Render();
@@ -150,6 +177,7 @@ void Application::Loop()
 void Application::Quit()
 {
 	//Close SDL
+	Physics::GetInstance()->Quit();
 	SDL_GL_DeleteContext(m_glContext);
 	SDL_DestroyWindow(m_window);
 	SDL_QuitSubSystem(SDL_INIT_EVERYTHING);

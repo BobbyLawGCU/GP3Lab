@@ -15,7 +15,7 @@ public:
 
 	void AddComponent(Component* c);
 	template<class T> void AddComponent();
-	//template<class T> T* GetComponent();
+	template<class T> T* GetComponent();
 
 	void OnUpdate(float deltaTime);
 	void OnRender();
@@ -40,4 +40,16 @@ void Entity::AddComponent()
 }
 
 //entity GetComponent function template goes HERE!
-
+template<class T>
+T* Entity::GetComponent()
+{
+	for (auto& c : m_components)
+	{
+		T* cd = dynamic_cast<T*>(c);
+		if (cd != nullptr)
+		{
+			return cd;
+		}
+	}
+	return nullptr;
+}

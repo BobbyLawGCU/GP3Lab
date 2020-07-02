@@ -11,8 +11,6 @@ void RigidBody::OnRender()
 {
 }
 
-
-
 void RigidBody::Init(CollisionShape* shape, float mass, const glm::vec3 localInertia)
 {
 	btTransform bT = Physics::ConvertTransformToBtTransform(*m_entity->GetTransform());
@@ -28,6 +26,7 @@ void RigidBody::Init(CollisionShape* shape, float mass, const glm::vec3 localIne
 
 void RigidBody::UpdateParent()
 {
+	//TODO: Get the transform from the rigidbody's motionstate and apply it to the game objects transform
 	Transform* trans = m_entity->GetTransform();
 	btTransform bT;
 	m_rigidBody->getMotionState()->getWorldTransform(bT);

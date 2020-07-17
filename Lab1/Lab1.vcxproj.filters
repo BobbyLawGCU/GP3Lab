@@ -87,9 +87,6 @@
     <ClInclude Include="BoxShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ReactionComp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -153,9 +150,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BoxShape.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ReactionComp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -10,7 +10,6 @@ private:
 	btRigidBody* m_rigidBody;
 	btMotionState* m_mState = nullptr;
 	float mass;
-	std::vector<std::function<void(RigidBody)>> actions;
 
 public:
 

@@ -4,8 +4,6 @@
 
 class RigidBody;
 
-void physicsTickCallback(btDynamicsWorld* world, btScalar timeStep);
-
 class Physics
 {
 private:

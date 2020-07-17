@@ -131,7 +131,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /Y /I</Command>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -209,7 +209,6 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /Y /I</Command>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Quad.h" />
-    <ClInclude Include="ReactionComp.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="Shader.h" />
@@ -239,7 +238,6 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /Y /I</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="ReactionComp.cpp" />
     <ClCompile Include="Resources.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="Shader.cpp" />

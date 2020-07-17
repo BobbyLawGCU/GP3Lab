@@ -12,11 +12,7 @@ Physics::Physics()
 void Physics::Init()
 {
 	m_world->setGravity(btVector3(0, -9.8, 0));
-
-	m_world->setInternalTickCallback(physicsTickCallback);
 }
-
-
 
 void Physics::AddRigidbody(RigidBody* r)
 {
@@ -65,15 +61,4 @@ Physics* Physics::GetInstance()
 		m_instance = new Physics();
 	}
 	return m_instance;
-}
-
-void physicsTickCallback(btDynamicsWorld* world, btScalar timeStep)
-{
-	btDispatcher * dispatcher = world->getDispatcher();
-	for (int i = 0; i < dispatcher->getNumManifolds(); i++)
-	{
-		btPersistentManifold* contactManifold = dispatcher->getManifoldByIndexInternal(i);
-		btCollisionObject* obA = static_cast<btCollisionObject*>(contactManifold->getBody0);
-		btCollisionObject* obB = static_cast<btCollisionObject*>(contactManifold->getBody1);
-	}
 }

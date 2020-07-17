@@ -27,7 +27,7 @@ void MeshRenderer::OnRender()
 	GLuint loc = glGetUniformLocation(m_program->Get(), "MVP");
 	glUniformMatrix4fv(loc, 1, false, (const GLfloat*)glm::value_ptr(mvp));
 
-	glm::vec3 oColor = glm::vec3(1.f, 0.f, 0.f);
+	glm::vec3 oColor = glm::vec3(1.f, 1.f, 1.f);
 	loc = glGetUniformLocation(m_program->Get(), "objectColor");
 	glUniform3f(loc, oColor.x, oColor.y, oColor.z);
 
